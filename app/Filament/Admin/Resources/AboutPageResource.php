@@ -41,7 +41,7 @@ class AboutPageResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Hero')
-                    ->description('Full-width intro band (Glowing-style).')
+                    ->description('Full-width intro band (hero + title).')
                     ->schema([
                         Forms\Components\TextInput::make('hero_kicker')
                             ->maxLength(255),

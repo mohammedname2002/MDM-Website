@@ -121,7 +121,7 @@ Route::get('/', function () {
         ->get();
 
     return view('home', compact('featuredProducts', 'home', 'blogs', 'contact'));
-});
+})->name('home');
 
 Route::get('/blogs', function () {
     $search = trim((string) request('search', ''));
