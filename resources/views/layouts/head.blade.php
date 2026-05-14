@@ -679,7 +679,7 @@
 		}
 
 		main#content.layout-page:not(:has(.hero.vh-100)) > :first-child {
-			padding-top: 109px;
+			padding-top: 130px;
 		}
 
 		@media (min-width: 1200px) {
