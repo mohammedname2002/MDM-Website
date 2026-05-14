@@ -118,9 +118,7 @@
                 <a class="d-inline-block text-decoration-none" href="{{ route('home') }}"
                     title="{{ config('app.name', 'MDM') }} — Home">
                     @if (file_exists(public_path('assets/images/mdm.png')))
-                        <img class="img-fluid light-mode-img" src="{{ asset('assets/images/mdm.png') }}" width="179"
-                            height="26" alt="{{ config('app.name', 'MDM') }}">
-                        <img class="dark-mode-img img-fluid" src="{{ asset('assets/images/mdm.png') }}" width="179"
+                        <img class="img-fluid footer-brand-logo" src="{{ asset('assets/images/mdm.png') }}" width="179"
                             height="26" alt="{{ config('app.name', 'MDM') }}">
                     @else
                         <span class="fs-4 fw-bold text-body-emphasis">{{ config('app.name', 'MDM') }}</span>

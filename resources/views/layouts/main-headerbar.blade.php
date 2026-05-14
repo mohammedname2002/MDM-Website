@@ -13,17 +13,16 @@
 			class="main-header nav navbar navbar-dark bg-transparent navbar-expand-xl transition-all-1 py-4 py-xl-5">
 			<div class="container-wide container">
 				<div class="header-bar-grid">
-					<a href="{{ url('/') }}"
+					<a href="{{ route('home') }}"
 						class="header-bar-brand navbar-brand d-inline-flex align-items-center py-2 my-0 flex-shrink-0 text-decoration-none"
 						aria-label="{{ $brandName }} — Home">
 						@if ($mdmLogoUrl)
-							<img src="{{ $mdmLogoUrl }}" alt="" class="img-fluid d-block header-bar-logo">
+							<img src="{{ $mdmLogoUrl }}" alt="{{ $brandName }}" class="img-fluid d-block header-bar-logo">
 						@else
 							<span class="fs-1 fw-bold lh-sm text-primary">{{ $brandName }}</span>
 						@endif
 					</a>
-					<div class="header-bar-actions d-flex align-items-center flex-wrap justify-content-end gap-2 min-w-0">
-						<div class="header-bar-icons d-flex align-items-center gap-2 flex-shrink-0">
+					<div class="header-bar-icons d-flex align-items-center flex-shrink-0">
 						<button type="button"
 							class="btn btn-sm btn-outline-light rounded-pill header-ctrl-outline border d-inline-flex d-xl-none align-items-center justify-content-center"
 							style="width: 2.5rem; height: 2.5rem;"
@@ -55,20 +54,19 @@
 							<i class="bi bi-moon-fill theme-icon-when-light" aria-hidden="true"></i>
 							<i class="bi bi-sun-fill theme-icon-when-dark d-none" aria-hidden="true"></i>
 						</button>
-						</div>
-						<form class="header-bar-search d-flex align-items-center gap-2 min-w-0" method="get"
-							action="{{ route('products') }}" role="search">
-							<label for="header-search-q" class="visually-hidden">Search products</label>
-							<input id="header-search-q" type="search" name="q" value="{{ old('q', request('q')) }}"
-								class="form-control form-control-sm header-search-input rounded-pill px-3"
-								placeholder="Search products" autocomplete="off">
-							<button type="submit"
-								class="btn btn-sm rounded-pill px-3 header-search-btn"
-								aria-label="Search">
-								<i class="bi bi-search" aria-hidden="true"></i>
-							</button>
-						</form>
 					</div>
+					<form class="header-bar-search d-flex align-items-center min-w-0" method="get"
+						action="{{ route('products') }}" role="search">
+						<label for="header-search-q" class="visually-hidden">Search products</label>
+						<input id="header-search-q" type="search" name="q" value="{{ old('q', request('q')) }}"
+							class="form-control form-control-sm header-search-input rounded-pill px-3"
+							placeholder="Search products" autocomplete="off">
+						<button type="submit"
+							class="btn btn-sm rounded-pill px-3 header-search-btn flex-shrink-0"
+							aria-label="Search">
+							<i class="bi bi-search" aria-hidden="true"></i>
+						</button>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -83,7 +81,7 @@
 	<div class="offcanvas-body">
 		<ul class="list-unstyled mb-0">
 			<li class="mb-3">
-				<a class="text-decoration-none fw-semibold" href="{{ url('/') }}">Home</a>
+				<a class="text-decoration-none fw-semibold" href="{{ route('home') }}">Home</a>
 			</li>
 			<li class="mb-3">
 				<a class="text-decoration-none fw-semibold" href="{{ route('products') }}">Products</a>
