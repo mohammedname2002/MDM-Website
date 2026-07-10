@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -14,6 +15,9 @@ class Product extends Model
     protected $fillable = [
         'title',
         'slug',
+        'category_id',
+        'subcategory_id',
+        'sub_subcategory_id',
         'description',
         'how_to_use',
         'price',
@@ -27,6 +31,9 @@ class Product extends Model
     protected function casts(): array
     {
         return [
+            'category_id' => 'integer',
+            'subcategory_id' => 'integer',
+            'sub_subcategory_id' => 'integer',
             'images' => 'array',
             'price' => 'decimal:2',
             'compare_at_price' => 'decimal:2',
@@ -69,6 +76,21 @@ class Product extends Model
         }
 
         return $slug;
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subcategory(): BelongsTo
+    {
+        return $this->belongsTo(Subcategory::class);
+    }
+
+    public function subSubcategory(): BelongsTo
+    {
+        return $this->belongsTo(SubSubcategory::class);
     }
 
     public function isOnSale(): bool

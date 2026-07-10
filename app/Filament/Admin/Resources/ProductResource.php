@@ -3,7 +3,10 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ProductResource\Pages;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Subcategory;
+use App\Models\SubSubcategory;
 use Filament\Forms;
 use Illuminate\Support\Str;
 use Filament\Forms\Form;
@@ -95,6 +98,57 @@ class ProductResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
+                Forms\Components\Section::make('Organization')
+                    ->description('Place this product in the category tree. Subcategory and sub-subcategory are optional — pick as deep as you need.')
+                    ->schema([
+                        Forms\Components\Select::make('category_id')
+                            ->label('Category')
+                            ->options(fn () => Category::query()->orderBy('sort_order')->orderBy('name')->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Forms\Set $set): void {
+                                $set('subcategory_id', null);
+                                $set('sub_subcategory_id', null);
+                            }),
+                        Forms\Components\Select::make('subcategory_id')
+                            ->label('Subcategory')
+                            ->options(function (callable $get) {
+                                $categoryId = $get('category_id');
+
+                                if (! $categoryId) {
+                                    return [];
+                                }
+
+                                return Subcategory::query()
+                                    ->where('category_id', $categoryId)
+                                    ->orderBy('sort_order')
+                                    ->orderBy('name')
+                                    ->pluck('name', 'id');
+                            })
+                            ->searchable()
+                            ->live()
+                            ->afterStateUpdated(fn (Forms\Set $set) => $set('sub_subcategory_id', null))
+                            ->disabled(fn (callable $get) => ! $get('category_id')),
+                        Forms\Components\Select::make('sub_subcategory_id')
+                            ->label('Sub-subcategory')
+                            ->options(function (callable $get) {
+                                $subcategoryId = $get('subcategory_id');
+
+                                if (! $subcategoryId) {
+                                    return [];
+                                }
+
+                                return SubSubcategory::query()
+                                    ->where('subcategory_id', $subcategoryId)
+                                    ->orderBy('sort_order')
+                                    ->orderBy('name')
+                                    ->pluck('name', 'id');
+                            })
+                            ->searchable()
+                            ->disabled(fn (callable $get) => ! $get('subcategory_id')),
+                    ])
+                    ->columns(3),
             ]);
     }
 
@@ -105,6 +159,15 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category')
+                    ->placeholder('—')
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('subcategory.name')
+                    ->label('Subcategory')
+                    ->placeholder('—')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\ImageColumn::make('images')
                     ->label('Photos')
                     ->disk('public')
@@ -135,7 +198,11 @@ class ProductResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('category_id')
+                    ->label('Category')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

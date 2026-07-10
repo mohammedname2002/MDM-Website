@@ -2,7 +2,9 @@
 
 use App\Models\AboutPage;
 use App\Models\Blog;
+use App\Models\Category;
 use App\Models\ContactPage;
+use App\Models\Subcategory;
 use App\Models\ContactMessage;
 use App\Models\HomePage;
 use App\Models\LegalPage;
@@ -245,6 +247,20 @@ Route::get('/blogs/{blog:slug}', function (Blog $blog) {
 
 Route::get('/products', function () {
     $search = trim((string) request('q', ''));
+    $categorySlug = trim((string) request('category', ''));
+    $subcategorySlug = trim((string) request('subcategory', ''));
+
+    $activeCategory = $categorySlug !== ''
+        ? Category::query()->where('slug', $categorySlug)->where('is_active', true)->first()
+        : null;
+
+    $activeSubcategory = ($activeCategory && $subcategorySlug !== '')
+        ? Subcategory::query()
+            ->where('category_id', $activeCategory->id)
+            ->where('slug', $subcategorySlug)
+            ->where('is_active', true)
+            ->first()
+        : null;
 
     $products = Product::query()
         ->when($search !== '', function ($query) use ($search) {
@@ -254,10 +270,12 @@ Route::get('/products', function () {
                     ->orWhere('slug', 'like', $like);
             });
         })
+        ->when($activeCategory, fn ($query) => $query->where('category_id', $activeCategory->id))
+        ->when($activeSubcategory, fn ($query) => $query->where('subcategory_id', $activeSubcategory->id))
         ->orderBy('title')
         ->get();
 
-    return view('products', compact('products', 'search'));
+    return view('products', compact('products', 'search', 'activeCategory', 'activeSubcategory'));
 })->name('products');
 
 Route::get('/products/{product:slug}', function (Product $product) {

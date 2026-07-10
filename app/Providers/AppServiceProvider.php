@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Share the active category tree with the header menu on every page.
+        View::composer('layouts.main-headerbar', function ($view): void {
+            $navCategories = Cache::remember('nav_categories', 300, function () {
+                return Category::query()
+                    ->where('is_active', true)
+                    ->with(['activeSubcategories'])
+                    ->orderBy('sort_order')
+                    ->orderBy('name')
+                    ->get();
+            });
+
+            $view->with('navCategories', $navCategories);
+        });
     }
 }

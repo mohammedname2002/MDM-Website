@@ -32,10 +32,48 @@
 							aria-label="Open menu">
 							<i class="bi bi-list" aria-hidden="true"></i>
 						</button>
-						<a href="{{ route('products') }}"
-							class="btn btn-sm header-nav-link d-none d-xl-inline-flex">
-							Products
-						</a>
+						@if (!empty($navCategories) && $navCategories->isNotEmpty())
+							<div class="dropdown d-none d-xl-inline-flex header-products-dropdown">
+								<a href="{{ route('products') }}" id="headerProductsMenu"
+									class="btn btn-sm header-nav-link dropdown-toggle" role="button"
+									data-bs-toggle="dropdown" aria-expanded="false">
+									Products
+								</a>
+								<ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2 header-products-menu"
+									aria-labelledby="headerProductsMenu"
+									style="min-width: 16rem; max-height: 70vh; overflow-y: auto;">
+									<li>
+										<a class="dropdown-item fw-semibold" href="{{ route('products') }}">All products</a>
+									</li>
+									<li><hr class="dropdown-divider my-2"></li>
+									@foreach ($navCategories as $navCategory)
+										<li>
+											<a class="dropdown-item fw-semibold"
+												href="{{ route('products', ['category' => $navCategory->slug]) }}">
+												{{ $navCategory->name }}
+											</a>
+											@if ($navCategory->activeSubcategories->isNotEmpty())
+												<ul class="list-unstyled mb-1">
+													@foreach ($navCategory->activeSubcategories as $navSubcategory)
+														<li>
+															<a class="dropdown-item small text-body-secondary py-1 ps-4"
+																href="{{ route('products', ['category' => $navCategory->slug, 'subcategory' => $navSubcategory->slug]) }}">
+																{{ $navSubcategory->name }}
+															</a>
+														</li>
+													@endforeach
+												</ul>
+											@endif
+										</li>
+									@endforeach
+								</ul>
+							</div>
+						@else
+							<a href="{{ route('products') }}"
+								class="btn btn-sm header-nav-link d-none d-xl-inline-flex">
+								Products
+							</a>
+						@endif
 						<a href="{{ route('blogs.index') }}"
 							class="btn btn-sm header-nav-link d-none d-xl-inline-flex">
 							Blogs
@@ -85,6 +123,30 @@
 			</li>
 			<li class="mb-3">
 				<a class="text-decoration-none fw-semibold" href="{{ route('products') }}">Products</a>
+				@if (!empty($navCategories) && $navCategories->isNotEmpty())
+					<ul class="list-unstyled ps-3 mt-2 mb-0">
+						@foreach ($navCategories as $navCategory)
+							<li class="mb-2">
+								<a class="text-decoration-none fw-medium"
+									href="{{ route('products', ['category' => $navCategory->slug]) }}">
+									{{ $navCategory->name }}
+								</a>
+								@if ($navCategory->activeSubcategories->isNotEmpty())
+									<ul class="list-unstyled ps-3 mt-1">
+										@foreach ($navCategory->activeSubcategories as $navSubcategory)
+											<li class="mb-1">
+												<a class="text-decoration-none small text-body-secondary"
+													href="{{ route('products', ['category' => $navCategory->slug, 'subcategory' => $navSubcategory->slug]) }}">
+													{{ $navSubcategory->name }}
+												</a>
+											</li>
+										@endforeach
+									</ul>
+								@endif
+							</li>
+						@endforeach
+					</ul>
+				@endif
 			</li>
 			<li class="mb-3">
 				<a class="text-decoration-none fw-semibold" href="{{ route('blogs.index') }}">Blogs</a>
