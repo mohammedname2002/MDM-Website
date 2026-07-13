@@ -106,22 +106,6 @@
 			color: var(--bs-primary);
 		}
 
-		.page-contact .contact-map-section {
-			padding-top: var(--contact-gap-section);
-			padding-bottom: var(--contact-gap-section);
-		}
-
-		.page-contact .contact-map-wrap {
-			border-radius: 1.25rem;
-			overflow: hidden;
-			box-shadow: 0 0.5rem 2rem rgba(var(--bs-body-color-rgb), 0.07);
-			border: 1px solid rgba(var(--bs-primary-rgb), 0.08);
-		}
-
-		html[data-bs-theme="dark"] .page-contact .contact-map-wrap {
-			box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.35);
-		}
-
 		.page-contact .contact-form-section {
 			padding-top: var(--contact-gap-section);
 			padding-bottom: clamp(4rem, 8vw, 6rem);
@@ -201,12 +185,6 @@
 		}
 	</style>
 @endsection
-
-@php
-	$mapOpts = $contact->mapOptionsResolved();
-	$mapMarkers = $contact->mapMarkersResolved();
-	$token = trim((string) ($contact->mapbox_access_token ?? ''));
-@endphp
 
 @section('content')
 	<main id="content" class="wrapper layout-page page-contact">
@@ -311,22 +289,6 @@
 				</div>
 			</div>
 		</section>
-
-		@if ($token !== '' && $mapOpts !== [])
-			<section class="contact-page-surface contact-map-section">
-				<div class="container">
-					<div class="contact-map-wrap">
-						<div id="map"
-							class="mapbox-gl map-point-animate map-box-has-effect"
-							style="height:{{ max(200, (int) $contact->map_height) }}px"
-							data-mapbox-access-token="{{ e($token) }}"
-							data-mapbox-options="{{ e(json_encode($mapOpts, JSON_UNESCAPED_SLASHES)) }}"
-							data-mapbox-marker="{{ e(json_encode($mapMarkers, JSON_UNESCAPED_SLASHES)) }}">
-						</div>
-					</div>
-				</div>
-			</section>
-		@endif
 
 		<section class="contact-page-surface contact-form-section">
 			<div class="container">

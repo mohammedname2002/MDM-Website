@@ -935,6 +935,82 @@
 		html[data-bs-theme="dark"] .banner-05 .light-mode-img {
 			display: none !important;
 		}
+
+		/* ======================================================
+		   REFINED HEADER  (frosted sticky bar + animated nav underline)
+		   ====================================================== */
+		#header .sticky-area-wrap.sticky {
+			background: rgba(255, 255, 255, 0.82);
+			-webkit-backdrop-filter: saturate(180%) blur(14px);
+			backdrop-filter: saturate(180%) blur(14px);
+			box-shadow: 0 1px 0 rgba(16, 24, 40, 0.06), 0 10px 30px rgba(16, 24, 40, 0.06);
+		}
+
+		html[data-bs-theme="dark"] #header .sticky-area-wrap.sticky {
+			background: rgba(13, 26, 45, 0.80);
+			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06), 0 10px 30px rgba(0, 0, 0, 0.45);
+		}
+
+		/* Animated centre-out underline instead of a flat text-decoration */
+		#header .header-nav-link {
+			position: relative;
+			font-weight: 500;
+		}
+
+		#header .header-nav-link:hover {
+			text-decoration: none !important;
+			opacity: 1;
+		}
+
+		#header .header-nav-link::after {
+			content: "";
+			position: absolute;
+			left: 50%;
+			right: 50%;
+			bottom: 0;
+			height: 2px;
+			border-radius: 2px;
+			background: currentColor;
+			opacity: 0.9;
+			transition: left 0.28s ease, right 0.28s ease;
+			pointer-events: none;
+		}
+
+		#header .header-nav-link:hover::after {
+			left: 0.25rem;
+			right: 0.25rem;
+		}
+
+		/* Persistent underline for the current page + always-on CTA */
+		#header .header-nav-link.is-active::after {
+			left: 0.25rem;
+			right: 0.25rem;
+			opacity: 1;
+		}
+
+		#header .header-cta {
+			border-radius: 999px;
+			padding: 0.5rem 1.2rem;
+			font-weight: 600;
+			font-size: 1rem;
+			line-height: 1.2;
+			background: var(--bs-primary);
+			color: #fff !important;
+			border: 0;
+			transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+		}
+
+		#header .header-cta::after {
+			display: none;
+		}
+
+		#header .header-cta:hover {
+			color: #fff !important;
+			background: #2563c0;
+			transform: translateY(-1px);
+			box-shadow: 0 8px 18px rgba(50, 119, 216, 0.35);
+			text-decoration: none;
+		}
 	</style>
 
 

@@ -19,7 +19,7 @@
             @endif
         </figure>
         <div class="card-body text-center p-0 pt-2">
-            <h3 class="product-title card-title fs-16px fw-semibold mb-0 lh-sm px-2">
+            <h3 class="product-title card-title fs-14px fw-semibold mb-0 lh-sm px-2">
                 <a class="text-decoration-none text-body"
                     href="{{ route('products.show', $product) }}">{{ $product->title }}</a>
             </h3>

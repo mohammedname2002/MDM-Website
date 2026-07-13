@@ -127,14 +127,6 @@ MDM
 @endsection
 @section('content')
 
-@php
-    $section2Fallbacks = [
-        1 => ['assets/images/banner/banner-29.jpg', 'assets/images/banner/banner-white-29.jpg'],
-        2 => ['assets/images/banner/banner-30.jpg', 'assets/images/banner/banner-white-30.jpg'],
-        3 => ['assets/images/banner/banner-31.jpg', 'assets/images/banner/banner-white-31.jpg'],
-    ];
-@endphp
-
 <main id="content" class="wrapper layout-page">
     <section class="overflow-hidden">
 
@@ -155,55 +147,6 @@ MDM
                     </div>
              
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="pt-10">
-
-        <div class="container-fluid px-9">
-            <div class="row gy-30px gx-30px px-2">
-                @for ($i = 1; $i <= 3; $i++)
-                    @php
-                        $imgLight = $home->mediaUrl(
-                            $home->{"section2_card_{$i}_image_light"},
-                            $section2Fallbacks[$i][0],
-                        );
-                        $imgDark = $home->mediaUrl(
-                            $home->{"section2_card_{$i}_image_dark"},
-                            $section2Fallbacks[$i][1],
-                        );
-                        $cardTitle = $home->{"section2_card_{$i}_title"};
-                        $cardLinkLabel = $home->{"section2_card_{$i}_link_label"};
-                        $cardLinkUrl = filled($home->{"section2_card_{$i}_link_url"})
-                            ? $home->{"section2_card_{$i}_link_url"}
-                            : '#';
-                        $cardAlt = \Illuminate\Support\Str::limit(strip_tags((string) $cardTitle), 120) ?: 'Banner';
-                    @endphp
-                    <div class="col-12 col-md-4" data-animate="fadeInUp">
-                        <div class="card border-0 rounded-0 banner-05 hover-zoom-in hover-shine">
-                            <img class="lazy-image card-img object-fit-cover light-mode-img" src="#"
-                                data-src="{{ $imgLight }}" width="468" height="400" alt="{{ $cardAlt }}">
-                            <img class="lazy-image dark-mode-img card-img object-fit-cover" src="#"
-                                data-src="{{ $imgDark }}" width="468" height="400" alt="{{ $cardAlt }}">
-                            <div
-                                class="card-img-overlay d-inline-flex flex-column justify-content-end px-11 pt-11 pb-9 mb-2">
-                                @if (filled($cardTitle))
-                                    <h3 class="card-title fw-semibold pe-xxl-25">{!! $cardTitle !!}</h3>
-                                @endif
-                                @if (filled($cardLinkLabel))
-                                    <div>
-                                        <a href="{{ $cardLinkUrl }}"
-                                            class="btn btn-link text-decoration-none p-0 fw-semibold">{{ $cardLinkLabel }}<svg
-                                                class="icon">
-                                                <use xlink:href="#icon-arrow-right"></use>
-                                            </svg></a>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                @endfor
             </div>
         </div>
     </section>
@@ -369,64 +312,6 @@ MDM
             </div>
         </section>
     @endif
-
-    @php
-        $partnersHeading = (string) ($home->partners_heading ?? '');
-        $partnersIntro = (string) ($home->partners_intro ?? '');
-        $partnersLogos = is_array($home->partners_logos ?? null) ? $home->partners_logos : [];
-        $partnersBg = $home->mediaUrl($home->partners_bg_image ?? null, 'assets/images/others/news-letter-background.jpg');
-    @endphp
-
-    @if (filled($partnersHeading) || filled($partnersIntro) || count($partnersLogos))
-        <section id="partners" class="partners-section position-relative overflow-hidden mb-12 mb-lg-14">
-            <div class="container position-relative z-index-2 py-14 py-lg-18">
-                <div class="text-center mx-auto partners-copy" data-animate="fadeInUp">
-                    @if (filled($partnersHeading))
-                        <h2 class="text-white mb-5">{{ $partnersHeading }}</h2>
-                    @endif
-                    @if (filled($partnersIntro))
-                        <p class="text-white-50 mb-0">{{ $partnersIntro }}</p>
-                    @endif
-                </div>
-
-                @if (count($partnersLogos))
-                    <div class="partners-logos mt-10 mt-lg-12" data-animate="fadeInUp">
-                        <div class="slick-slider partners-slider"
-                            data-slick-options='{&#34;arrows&#34;:false,&#34;dots&#34;:false,&#34;infinite&#34;:true,&#34;autoplay&#34;:true,&#34;autoplaySpeed&#34;:1800,&#34;speed&#34;:650,&#34;pauseOnHover&#34;:false,&#34;slidesToShow&#34;:3,&#34;slidesToScroll&#34;:1,&#34;responsive&#34;:[{&#34;breakpoint&#34;:1400,&#34;settings&#34;:{&#34;slidesToShow&#34;:3}},{&#34;breakpoint&#34;:1200,&#34;settings&#34;:{&#34;slidesToShow&#34;:3}},{&#34;breakpoint&#34;:992,&#34;settings&#34;:{&#34;slidesToShow&#34;:2}},{&#34;breakpoint&#34;:768,&#34;settings&#34;:{&#34;slidesToShow&#34;:2,&#34;dots&#34;:true}},{&#34;breakpoint&#34;:480,&#34;settings&#34;:{&#34;slidesToShow&#34;:1,&#34;dots&#34;:true}}]}'>
-                            @foreach ($partnersLogos as $logo)
-                                @php
-                                    $logoUrl = $home->mediaUrl($logo['image'] ?? null, 'assets/images/logo.png');
-                                    $alt = trim((string) ($logo['alt'] ?? 'Partner'));
-                                    $url = trim((string) ($logo['url'] ?? ''));
-                                @endphp
-                                <div class="px-3 d-flex justify-content-center">
-                                    @if ($url !== '')
-                                        <a class="partners-logo-link" href="{{ $url }}"
-                                            @if (str_starts_with($url, 'http')) target="_blank" rel="noopener noreferrer" @endif>
-                                            <img class="partners-logo" src="{{ $logoUrl }}" alt="{{ $alt }}"
-                                                loading="lazy" decoding="async">
-                                        </a>
-                                    @else
-                                        <span class="partners-logo-link" aria-label="{{ $alt }}">
-                                            <img class="partners-logo" src="{{ $logoUrl }}" alt="{{ $alt }}"
-                                                loading="lazy" decoding="async">
-                                        </span>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
-            </div>
-
-            <div class="partners-bg position-absolute top-0 start-0 w-100 h-100 z-index-1"
-                style="background-image: url('{{ $partnersBg }}');"></div>
-            <div class="partners-overlay position-absolute top-0 start-0 w-100 h-100 z-index-1"></div>
-        </section>
-    @endif
-
-
-
 
     <section id="from_our_blog_2" class="pt-14 pb-16 py-lg-18 mt-1">
 

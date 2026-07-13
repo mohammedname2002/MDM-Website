@@ -35,7 +35,8 @@
 						@if (!empty($navCategories) && $navCategories->isNotEmpty())
 							<div class="dropdown d-none d-xl-inline-flex header-products-dropdown">
 								<a href="{{ route('products') }}" id="headerProductsMenu"
-									class="btn btn-sm header-nav-link dropdown-toggle" role="button"
+									class="btn btn-sm header-nav-link dropdown-toggle {{ request()->routeIs('products') || request()->routeIs('products.show') ? 'is-active' : '' }}"
+									role="button"
 									data-bs-toggle="dropdown" aria-expanded="false">
 									Products
 								</a>
@@ -70,20 +71,20 @@
 							</div>
 						@else
 							<a href="{{ route('products') }}"
-								class="btn btn-sm header-nav-link d-none d-xl-inline-flex">
+								class="btn btn-sm header-nav-link d-none d-xl-inline-flex {{ request()->routeIs('products') || request()->routeIs('products.show') ? 'is-active' : '' }}">
 								Products
 							</a>
 						@endif
 						<a href="{{ route('blogs.index') }}"
-							class="btn btn-sm header-nav-link d-none d-xl-inline-flex">
+							class="btn btn-sm header-nav-link d-none d-xl-inline-flex {{ request()->routeIs('blogs.*') ? 'is-active' : '' }}">
 							Blogs
 						</a>
 						<a href="{{ route('about') }}"
-							class="btn btn-sm header-nav-link header-nav-link--primary d-none d-xl-inline-flex">
+							class="btn btn-sm header-nav-link d-none d-xl-inline-flex {{ request()->routeIs('about') ? 'is-active' : '' }}">
 							About
 						</a>
 						<a href="{{ route('contact') }}"
-							class="btn btn-sm header-nav-link header-nav-link--primary d-none d-xl-inline-flex">
+							class="btn btn-sm header-cta d-none d-xl-inline-flex align-items-center">
 							Contact
 						</a>
 						<button type="button" id="header-theme-toggle"
