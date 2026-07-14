@@ -1,6 +1,37 @@
 @extends('layouts.master')
 
+@php
+    $blogImage = $blog->mainImageUrl();
+    $blogPublished = optional($blog->published_at)->toIso8601String();
+@endphp
+
 @section('title', ($blog->title ?? 'Blog') . ' — ' . config('app.name', 'MDM'))
+@section('meta_description', $blog->excerpt(160))
+@section('og_type', 'article')
+@if ($blogImage)
+    @section('og_image', $blogImage)
+@endif
+
+@section('structured_data')
+    <script type="application/ld+json">
+    {!! json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'BlogPosting',
+        'headline' => $blog->title,
+        'description' => $blog->excerpt(160),
+        'image' => $blogImage ? [$blogImage] : null,
+        'datePublished' => $blogPublished,
+        'dateModified' => optional($blog->updated_at)->toIso8601String() ?: $blogPublished,
+        'author' => ['@type' => 'Organization', 'name' => config('app.name', 'MDM')],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => config('app.name', 'MDM'),
+            'logo' => ['@type' => 'ImageObject', 'url' => asset('assets/images/mdm.png')],
+        ],
+        'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => route('blogs.show', $blog)],
+    ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+@endsection
 
 @section('content')
     @php

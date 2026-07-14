@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
-@section('title', 'Blogs')
+@section('title', 'Blog — Dermatology & Aesthetic Insights — ' . config('app.name', 'MDM'))
+@section('meta_description', 'Read the ' . config('app.name', 'MDM') . ' blog for insights on dermatology, medical aesthetics, skincare science, treatments, and product guidance for professionals.')
 
 @section('content')
 	<main id="content" class="wrapper layout-page">

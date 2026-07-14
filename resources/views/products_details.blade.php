@@ -1,7 +1,45 @@
 @extends('layouts.master')
 
-@section('title')
-    {{ $product->title }} — MDM
+@php
+    use Illuminate\Support\Str;
+
+    $seoDesc = filled($product->description)
+        ? Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags($product->description))), 160)
+        : $product->title . ' — available at ' . config('app.name', 'MDM') . ', supplier of dermatology and medical aesthetic products for professionals.';
+    $seoImage = $product->mainImageUrl();
+@endphp
+
+@section('title', $product->title . ' — ' . config('app.name', 'MDM'))
+@section('meta_description', $seoDesc)
+@section('og_type', 'product')
+@if ($seoImage)
+    @section('og_image', $seoImage)
+@endif
+
+@section('structured_data')
+    <script type="application/ld+json">
+    {!! json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->title,
+        'description' => $seoDesc,
+        'image' => $product->galleryUrls(),
+        'sku' => (string) $product->id,
+        'brand' => optional($product->brand)->name ? [
+            '@type' => 'Brand',
+            'name' => $product->brand->name,
+        ] : null,
+        'category' => optional($product->category)->name,
+        'url' => route('products.show', $product),
+        'offers' => (float) $product->price > 0 ? [
+            '@type' => 'Offer',
+            'url' => route('products.show', $product),
+            'priceCurrency' => 'USD',
+            'price' => number_format((float) $product->price, 2, '.', ''),
+            'availability' => 'https://schema.org/InStock',
+        ] : null,
+    ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endsection
 
 @section('css')

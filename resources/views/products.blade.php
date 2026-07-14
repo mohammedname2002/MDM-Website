@@ -1,8 +1,16 @@
 @extends('layouts.master')
-@section('title')
-
-MDM
-@endsection
+@php
+    $activeBrand = $activeBrand ?? null;
+    $activeCategory = $activeCategory ?? null;
+    $activeSubcategory = $activeSubcategory ?? null;
+    $seoScope = $activeBrand->name ?? $activeSubcategory->name ?? $activeCategory->name ?? null;
+    $seoTitle = ($seoScope ?? 'All Products') . ' — ' . config('app.name', 'MDM');
+    $seoDesc = $seoScope
+        ? 'Browse ' . $seoScope . ' products at ' . config('app.name', 'MDM') . '. Advanced dermatology and medical aesthetic solutions for professionals.'
+        : 'Explore the full ' . config('app.name', 'MDM') . ' catalog of dermatology and medical aesthetic products, devices, and professional skincare brands.';
+@endphp
+@section('title', $seoTitle)
+@section('meta_description', $seoDesc)
 @section('css')
 
 

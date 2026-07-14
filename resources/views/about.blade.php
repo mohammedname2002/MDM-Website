@@ -1,5 +1,6 @@
 @extends('layouts.master')
-@section('title', 'About us — ' . config('app.name', 'MDM'))
+@section('title', 'About Us — ' . config('app.name', 'MDM'))
+@section('meta_description', 'Learn about ' . config('app.name', 'MDM') . ' — our mission to supply advanced dermatology and medical aesthetic products, trusted brands, and professional skincare solutions to clinics and practitioners.')
 
 @php
 	$testimonials = is_array($about->testimonials) ? $about->testimonials : [];

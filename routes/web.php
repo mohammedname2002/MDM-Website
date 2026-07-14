@@ -305,4 +305,50 @@ Route::get('/products/{product:slug}', function (Product $product) {
     return view('products_details', compact('product', 'relatedProducts'));
 })->name('products.show');
 
+Route::get('/sitemap.xml', function () {
+    $urls = [];
+
+    $add = function (string $loc, ?string $lastmod = null, string $changefreq = 'weekly', string $priority = '0.6') use (&$urls) {
+        $urls[] = [
+            'loc' => $loc,
+            'lastmod' => $lastmod,
+            'changefreq' => $changefreq,
+            'priority' => $priority,
+        ];
+    };
+
+    // Static / key pages.
+    $add(route('home'), null, 'daily', '1.0');
+    $add(route('products'), null, 'daily', '0.9');
+    $add(route('blogs.index'), null, 'weekly', '0.7');
+    $add(route('about'), null, 'monthly', '0.5');
+    $add(route('contact'), null, 'monthly', '0.5');
+    $add(route('privacy'), null, 'yearly', '0.2');
+    $add(route('terms'), null, 'yearly', '0.2');
+
+    // Brand-filtered product listings.
+    Brand::query()->where('is_active', true)->orderBy('name')->get()
+        ->each(fn (Brand $b) => $add(route('products', ['brand' => $b->slug]), optional($b->updated_at)->toAtomString(), 'weekly', '0.7'));
+
+    // Category-filtered product listings.
+    Category::query()->where('is_active', true)->orderBy('name')->get()
+        ->each(fn (Category $c) => $add(route('products', ['category' => $c->slug]), optional($c->updated_at)->toAtomString(), 'weekly', '0.6'));
+
+    // Individual products.
+    Product::query()->orderByDesc('updated_at')->get()
+        ->each(fn (Product $p) => $add(route('products.show', $p), optional($p->updated_at)->toAtomString(), 'weekly', '0.8'));
+
+    // Published blog posts.
+    Blog::query()
+        ->where(function ($q) {
+            $q->whereNull('published_at')->orWhere('published_at', '<=', now());
+        })
+        ->orderByDesc('updated_at')->get()
+        ->each(fn (Blog $b) => $add(route('blogs.show', $b), optional($b->updated_at)->toAtomString(), 'monthly', '0.6'));
+
+    $xml = view('sitemap', ['urls' => $urls])->render();
+
+    return response($xml, 200)->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
 Route::redirect('/login', '/admin/login');

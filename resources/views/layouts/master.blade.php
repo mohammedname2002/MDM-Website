@@ -26,6 +26,7 @@
             <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
         @endif
 
+  @include('layouts.seo')
   @include('layouts.head')
 </head>
 

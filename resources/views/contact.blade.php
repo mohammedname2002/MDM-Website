@@ -1,5 +1,6 @@
 @extends('layouts.master')
-@section('title', ($contact->breadcrumb_label ?? 'Contact us') . ' — ' . config('app.name', 'MDM'))
+@section('title', ($contact->breadcrumb_label ?? 'Contact Us') . ' — ' . config('app.name', 'MDM'))
+@section('meta_description', 'Get in touch with ' . config('app.name', 'MDM') . '. Contact our team for dermatology and medical aesthetic product enquiries, orders, and professional support.')
 
 @section('css')
 	<style>

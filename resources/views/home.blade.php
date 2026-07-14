@@ -1,8 +1,7 @@
 @extends('layouts.master')
-@section('title')
-
-MDM
-@endsection
+@section('title', 'MDM Derma — Advanced Dermatology & Medical Aesthetic Products')
+@section('meta_description', 'MDM Derma supplies advanced dermatology and medical aesthetic products, devices, and professional skincare brands for clinics and practitioners. Discover our brands and full catalog.')
+@section('meta_keywords', 'MDM Derma, dermatology products, medical aesthetics, aesthetic devices, professional skincare, mesotherapy, skin care clinic supplies')
 @section('css')
     <style>
         .our-products-title {

@@ -1,6 +1,8 @@
 @extends('layouts.master')
 
 @section('title', ($page->title ?? 'Page') . ' — ' . config('app.name', 'MDM'))
+@section('meta_description', ($page->title ?? 'Legal') . ' for ' . config('app.name', 'MDM') . '. Read our policies and terms of use.')
+@section('meta_robots', 'noindex, follow')
 
 @section('content')
 	<main id="content" class="wrapper layout-page">
