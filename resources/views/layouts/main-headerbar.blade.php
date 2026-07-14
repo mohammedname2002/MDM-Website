@@ -123,9 +123,14 @@
 				<a class="text-decoration-none fw-semibold" href="{{ route('home') }}">Home</a>
 			</li>
 			<li class="mb-3">
-				<a class="text-decoration-none fw-semibold" href="{{ route('products') }}">Products</a>
 				@if (!empty($navCategories) && $navCategories->isNotEmpty())
-					<ul class="list-unstyled ps-3 mt-2 mb-0">
+					<div class="d-flex align-items-center justify-content-between">
+						<a class="text-decoration-none fw-semibold" href="{{ route('products') }}">Products</a>
+						<button type="button" class="btn btn-sm btn-link text-decoration-none p-0 ms-2 collapsed" data-bs-toggle="collapse" data-bs-target="#offcanvasProductsMenu" aria-expanded="false" aria-controls="offcanvasProductsMenu" aria-label="Toggle product categories">
+							<i class="bi bi-chevron-down" aria-hidden="true"></i>
+						</button>
+					</div>
+					<ul id="offcanvasProductsMenu" class="collapse list-unstyled ps-3 mt-2 mb-0">
 						@foreach ($navCategories as $navCategory)
 							<li class="mb-2">
 								<a class="text-decoration-none fw-medium"
@@ -147,6 +152,8 @@
 							</li>
 						@endforeach
 					</ul>
+				@else
+					<a class="text-decoration-none fw-semibold" href="{{ route('products') }}">Products</a>
 				@endif
 			</li>
 			<li class="mb-3">
