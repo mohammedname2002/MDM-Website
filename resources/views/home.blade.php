@@ -6,10 +6,7 @@ MDM
 @section('css')
     <style>
         .our-products-title {
-            letter-spacing: 0.02em;
-            font-weight: 800;
-            font-size: clamp(2.4rem, 6vw, 5rem);
-            line-height: 1;
+            letter-spacing: 0.04em;
         }
 
         .our-products-grid {
@@ -325,7 +322,7 @@ MDM
     @if (!empty($brands) && $brands->isNotEmpty())
         <section id="our-products" class="our-products-section pt-13 pt-lg-15">
             <div class="text-center mb-9 mb-lg-11" data-animate="fadeInUp">
-                <h2 class="our-products-title text-uppercase mb-0">Our Products</h2>
+                <h2 class="h3 our-products-title text-uppercase mb-0">Our Products</h2>
             </div>
 
             <div class="our-products-grid">
