@@ -231,10 +231,7 @@ MDM
 
                 <div class="hero-content">
                     <div data-animate="fadeInDown">
-                        <p class="text-white mb-8 fw-semibold fs-4">Find Inspration</p>
-                        <h1 class="text-white fw-semibold mb-8 hero-title-2">Natural Mineral <br> Water Spray</h1>
                     </div>
-             
                 </div>
             </div>
         </div>

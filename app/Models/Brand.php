@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -38,6 +39,9 @@ class Brand extends Model
                 );
             }
         });
+
+        static::saved(fn () => Cache::forget('nav_brands'));
+        static::deleted(fn () => Cache::forget('nav_brands'));
     }
 
     public function getRouteKeyName(): string

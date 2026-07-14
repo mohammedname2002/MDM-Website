@@ -32,7 +32,7 @@
 							aria-label="Open menu">
 							<i class="bi bi-list" aria-hidden="true"></i>
 						</button>
-						@if (!empty($navCategories) && $navCategories->isNotEmpty())
+						@if (!empty($navBrands) && $navBrands->isNotEmpty())
 							<div class="dropdown d-none d-xl-inline-flex header-products-dropdown">
 								<a href="{{ route('products') }}" id="headerProductsMenu"
 									class="btn btn-sm header-nav-link dropdown-toggle {{ request()->routeIs('products') || request()->routeIs('products.show') ? 'is-active' : '' }}"
@@ -47,24 +47,12 @@
 										<a class="dropdown-item fw-semibold" href="{{ route('products') }}">All products</a>
 									</li>
 									<li><hr class="dropdown-divider my-2"></li>
-									@foreach ($navCategories as $navCategory)
+									@foreach ($navBrands as $navBrand)
 										<li>
 											<a class="dropdown-item fw-semibold"
-												href="{{ route('products', ['category' => $navCategory->slug]) }}">
-												{{ $navCategory->name }}
+												href="{{ route('products', ['brand' => $navBrand->slug]) }}">
+												{{ $navBrand->name }}
 											</a>
-											@if ($navCategory->activeSubcategories->isNotEmpty())
-												<ul class="list-unstyled mb-1">
-													@foreach ($navCategory->activeSubcategories as $navSubcategory)
-														<li>
-															<a class="dropdown-item small text-body-secondary py-1 ps-4"
-																href="{{ route('products', ['category' => $navCategory->slug, 'subcategory' => $navSubcategory->slug]) }}">
-																{{ $navSubcategory->name }}
-															</a>
-														</li>
-													@endforeach
-												</ul>
-											@endif
 										</li>
 									@endforeach
 								</ul>
@@ -123,32 +111,20 @@
 				<a class="text-decoration-none fw-semibold" href="{{ route('home') }}">Home</a>
 			</li>
 			<li class="mb-3">
-				@if (!empty($navCategories) && $navCategories->isNotEmpty())
+				@if (!empty($navBrands) && $navBrands->isNotEmpty())
 					<div class="d-flex align-items-center justify-content-between">
 						<a class="text-decoration-none fw-semibold" href="{{ route('products') }}">Products</a>
-						<button type="button" class="btn btn-sm btn-link text-decoration-none p-0 ms-2 collapsed" data-bs-toggle="collapse" data-bs-target="#offcanvasProductsMenu" aria-expanded="false" aria-controls="offcanvasProductsMenu" aria-label="Toggle product categories">
+						<button type="button" class="btn btn-sm btn-link text-decoration-none p-0 ms-2 collapsed" data-bs-toggle="collapse" data-bs-target="#offcanvasProductsMenu" aria-expanded="false" aria-controls="offcanvasProductsMenu" aria-label="Toggle brands">
 							<i class="bi bi-chevron-down" aria-hidden="true"></i>
 						</button>
 					</div>
 					<ul id="offcanvasProductsMenu" class="collapse list-unstyled ps-3 mt-2 mb-0">
-						@foreach ($navCategories as $navCategory)
+						@foreach ($navBrands as $navBrand)
 							<li class="mb-2">
 								<a class="text-decoration-none fw-medium"
-									href="{{ route('products', ['category' => $navCategory->slug]) }}">
-									{{ $navCategory->name }}
+									href="{{ route('products', ['brand' => $navBrand->slug]) }}">
+									{{ $navBrand->name }}
 								</a>
-								@if ($navCategory->activeSubcategories->isNotEmpty())
-									<ul class="list-unstyled ps-3 mt-1">
-										@foreach ($navCategory->activeSubcategories as $navSubcategory)
-											<li class="mb-1">
-												<a class="text-decoration-none small text-body-secondary"
-													href="{{ route('products', ['category' => $navCategory->slug, 'subcategory' => $navSubcategory->slug]) }}">
-													{{ $navSubcategory->name }}
-												</a>
-											</li>
-										@endforeach
-									</ul>
-								@endif
 							</li>
 						@endforeach
 					</ul>

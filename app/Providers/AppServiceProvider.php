@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
@@ -33,7 +34,16 @@ class AppServiceProvider extends ServiceProvider
                     ->get();
             });
 
+            $navBrands = Cache::remember('nav_brands', 300, function () {
+                return Brand::query()
+                    ->where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->orderBy('name')
+                    ->get();
+            });
+
             $view->with('navCategories', $navCategories);
+            $view->with('navBrands', $navBrands);
         });
     }
 }
