@@ -23,14 +23,23 @@ MDM
         <section class="pb-15 pb-lg-20">
             <div class="container">
                 @php
+                    $activeBrand = $activeBrand ?? null;
                     $activeCategory = $activeCategory ?? null;
                     $activeSubcategory = $activeSubcategory ?? null;
-                    $pageHeading = $activeSubcategory->name ?? $activeCategory->name ?? 'Products';
+                    $pageHeading = $activeBrand->name ?? $activeSubcategory->name ?? $activeCategory->name ?? 'Products';
                 @endphp
                 <div class="mb-13 text-center pb-3" data-animate="fadeInUp">
+                    @if ($activeBrand && $activeBrand->logoUrl())
+                        <div class="mb-4">
+                            <img src="{{ $activeBrand->logoUrl() }}" alt="{{ $activeBrand->name }}"
+                                class="img-fluid d-inline-block" style="max-height: 90px; width: auto;">
+                        </div>
+                    @endif
                     <h1 class="h3 mb-0">{{ $pageHeading }}</h1>
                     @if (!empty($search))
                         <p class="text-body-secondary mb-0 mt-3">Results for &ldquo;{{ $search }}&rdquo;</p>
+                    @elseif ($activeBrand)
+                        <p class="text-body-secondary mb-0 mt-3">{{ filled($activeBrand->description) ? $activeBrand->description : 'Products by ' . $activeBrand->name }}</p>
                     @elseif ($activeSubcategory && $activeCategory)
                         <p class="text-body-secondary mb-0 mt-3">{{ $activeCategory->name }} &rsaquo; {{ $activeSubcategory->name }}</p>
                     @elseif ($activeCategory)
@@ -38,7 +47,7 @@ MDM
                     @else
                         <p class="text-body-secondary mb-0 mt-3">All items from your catalog</p>
                     @endif
-                    @if ($activeCategory || $activeSubcategory)
+                    @if ($activeBrand || $activeCategory || $activeSubcategory)
                         <a href="{{ route('products') }}" class="btn btn-sm header-nav-link mt-3">
                             <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> All products
                         </a>

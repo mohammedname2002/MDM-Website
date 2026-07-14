@@ -5,19 +5,70 @@ MDM
 @endsection
 @section('css')
     <style>
-        .letter-spacing-2 {
-            letter-spacing: 0.12em;
+        .our-products-title {
+            letter-spacing: 0.16em;
+            font-weight: 700;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
         }
 
-        .our-products-brand-logo img {
-            max-height: 90px;
+        .our-products-card {
+            padding: 1.75rem 1.25rem 1.5rem;
+            border-radius: 1rem;
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+        .our-products-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 1rem 2.5rem rgba(var(--bs-body-color-rgb), 0.10);
+        }
+
+        .our-products-card-media {
+            width: 100%;
+            height: 130px;
+            margin-bottom: 1.25rem;
+        }
+
+        .our-products-card-img {
+            max-height: 100%;
+            max-width: 100%;
             width: auto;
             object-fit: contain;
+            transition: transform .3s ease;
         }
 
-        .our-products-brand + .our-products-brand {
-            border-top: 1px solid var(--bs-border-color);
-            padding-top: 3.5rem;
+        .our-products-card:hover .our-products-card-img {
+            transform: scale(1.05);
+        }
+
+        .our-products-card-link {
+            display: inline-block;
+            font-weight: 600;
+            font-size: .95rem;
+            letter-spacing: .02em;
+            color: var(--bs-primary);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .our-products-card-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background: currentColor;
+            transition: width .3s ease;
+        }
+
+        .our-products-card:hover .our-products-card-link::after {
+            width: 100%;
+        }
+
+        @media (min-width: 992px) {
+            .our-products-card-media {
+                height: 150px;
+            }
         }
 
         .clinical-innovation-section {
@@ -279,35 +330,34 @@ MDM
     </section>
 
     @if (!empty($brands) && $brands->isNotEmpty())
-        <section id="our-products" class="our-products-section pb-15 pb-lg-20">
+        <section id="our-products" class="our-products-section pt-13 pt-lg-15 pb-15 pb-lg-20">
             <div class="container">
-                <div class="mb-11 text-center" data-animate="fadeInUp">
-                    <span class="text-uppercase fw-semibold text-primary letter-spacing-2 d-block mb-2">Our Products</span>
-                    <h2 class="h3 mb-0">Explore Our Brands</h2>
+                <div class="mb-11 mb-lg-13 text-center" data-animate="fadeInUp">
+                    <h2 class="our-products-title text-uppercase mb-0">Our Products</h2>
                 </div>
 
-                @foreach ($brands as $brand)
-                    <div class="our-products-brand mb-13 pb-2" data-animate="fadeInUp">
-                        <div class="our-products-brand-head text-center mb-8">
-                            @if ($brand->logoUrl())
-                                <div class="our-products-brand-logo mb-4">
-                                    <img src="{{ $brand->logoUrl() }}" alt="{{ $brand->name }}"
-                                        class="img-fluid d-inline-block" loading="lazy" decoding="async">
-                                </div>
-                            @endif
-                            <h3 class="h4 mb-0">{{ $brand->name }}</h3>
-                            @if (filled($brand->description))
-                                <p class="text-body-secondary mt-2 mb-0 mw-lg-75 ms-auto me-auto">{{ $brand->description }}</p>
-                            @endif
+                <div class="row g-4 g-lg-5 justify-content-center">
+                    @foreach ($brands as $brand)
+                        <div class="col-6 col-md-4" data-animate="fadeInUp">
+                            <div class="our-products-card h-100 text-center d-flex flex-column align-items-center justify-content-between">
+                                <a href="{{ route('products', ['brand' => $brand->slug]) }}"
+                                    class="our-products-card-media d-flex align-items-center justify-content-center"
+                                    aria-label="{{ $brand->name }}">
+                                    @if ($brand->logoUrl())
+                                        <img src="{{ $brand->logoUrl() }}" alt="{{ $brand->name }}"
+                                            class="our-products-card-img" loading="lazy" decoding="async">
+                                    @else
+                                        <span class="our-products-card-name h5 mb-0">{{ $brand->name }}</span>
+                                    @endif
+                                </a>
+                                <a href="{{ route('products', ['brand' => $brand->slug]) }}"
+                                    class="our-products-card-link">
+                                    Learn More
+                                </a>
+                            </div>
                         </div>
-
-                        <div class="row gy-50px justify-content-center">
-                            @foreach ($brand->products as $product)
-                                @include('partials.product-grid-card', ['product' => $product])
-                            @endforeach
-                        </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         </section>
     @endif

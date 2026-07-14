@@ -259,6 +259,11 @@ Route::get('/products', function () {
     $search = trim((string) request('q', ''));
     $categorySlug = trim((string) request('category', ''));
     $subcategorySlug = trim((string) request('subcategory', ''));
+    $brandSlug = trim((string) request('brand', ''));
+
+    $activeBrand = $brandSlug !== ''
+        ? Brand::query()->where('slug', $brandSlug)->where('is_active', true)->first()
+        : null;
 
     $activeCategory = $categorySlug !== ''
         ? Category::query()->where('slug', $categorySlug)->where('is_active', true)->first()
@@ -280,12 +285,13 @@ Route::get('/products', function () {
                     ->orWhere('slug', 'like', $like);
             });
         })
+        ->when($activeBrand, fn ($query) => $query->where('brand_id', $activeBrand->id))
         ->when($activeCategory, fn ($query) => $query->where('category_id', $activeCategory->id))
         ->when($activeSubcategory, fn ($query) => $query->where('subcategory_id', $activeSubcategory->id))
         ->orderBy('title')
         ->get();
 
-    return view('products', compact('products', 'search', 'activeCategory', 'activeSubcategory'));
+    return view('products', compact('products', 'search', 'activeBrand', 'activeCategory', 'activeSubcategory'));
 })->name('products');
 
 Route::get('/products/{product:slug}', function (Product $product) {
