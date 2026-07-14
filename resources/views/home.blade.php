@@ -6,68 +6,91 @@ MDM
 @section('css')
     <style>
         .our-products-title {
-            letter-spacing: 0.16em;
-            font-weight: 700;
-            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            letter-spacing: 0.02em;
+            font-weight: 800;
+            font-size: clamp(2.4rem, 6vw, 5rem);
+            line-height: 1;
         }
 
-        .our-products-card {
-            padding: 1.75rem 1.25rem 1.5rem;
-            border-radius: 1rem;
-            transition: transform .3s ease, box-shadow .3s ease;
-        }
-
-        .our-products-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 1rem 2.5rem rgba(var(--bs-body-color-rgb), 0.10);
-        }
-
-        .our-products-card-media {
+        .our-products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0;
             width: 100%;
-            height: 130px;
-            margin-bottom: 1.25rem;
         }
 
-        .our-products-card-img {
-            max-height: 100%;
-            max-width: 100%;
-            width: auto;
-            object-fit: contain;
-            transition: transform .3s ease;
-        }
-
-        .our-products-card:hover .our-products-card-img {
-            transform: scale(1.05);
-        }
-
-        .our-products-card-link {
-            display: inline-block;
-            font-weight: 600;
-            font-size: .95rem;
-            letter-spacing: .02em;
-            color: var(--bs-primary);
-            text-decoration: none;
+        .our-products-tile {
             position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            min-height: 460px;
+            padding: 2.5rem 1.5rem 3rem;
+            background-color: #eceef0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-decoration: none;
+            overflow: hidden;
         }
 
-        .our-products-card-link::after {
+        .our-products-tile::before {
             content: "";
             position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 0;
-            height: 1px;
-            background: currentColor;
-            transition: width .3s ease;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            transition: background .3s ease;
         }
 
-        .our-products-card:hover .our-products-card-link::after {
-            width: 100%;
+        .our-products-tile:hover::before {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .our-products-tile-name {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            text-align: center;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #1f2937;
+            padding: 0 1rem;
+        }
+
+        .our-products-btn {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            background-color: #e6156f;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: .01em;
+            padding: .85rem 2.25rem;
+            border-radius: .25rem;
+            transition: background-color .25s ease, transform .25s ease;
+        }
+
+        .our-products-tile:hover .our-products-btn {
+            background-color: #c01059;
+            transform: translateY(-3px);
         }
 
         @media (min-width: 992px) {
-            .our-products-card-media {
-                height: 150px;
+            .our-products-tile {
+                min-height: 560px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .our-products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .our-products-tile {
+                min-height: 360px;
             }
         }
 
@@ -330,34 +353,23 @@ MDM
     </section>
 
     @if (!empty($brands) && $brands->isNotEmpty())
-        <section id="our-products" class="our-products-section pt-13 pt-lg-15 pb-15 pb-lg-20">
-            <div class="container">
-                <div class="mb-11 mb-lg-13 text-center" data-animate="fadeInUp">
-                    <h2 class="our-products-title text-uppercase mb-0">Our Products</h2>
-                </div>
+        <section id="our-products" class="our-products-section pt-13 pt-lg-15">
+            <div class="text-center mb-9 mb-lg-11" data-animate="fadeInUp">
+                <h2 class="our-products-title text-uppercase mb-0">Our Products</h2>
+            </div>
 
-                <div class="row g-4 g-lg-5 justify-content-center">
-                    @foreach ($brands as $brand)
-                        <div class="col-6 col-md-4" data-animate="fadeInUp">
-                            <div class="our-products-card h-100 text-center d-flex flex-column align-items-center justify-content-between">
-                                <a href="{{ route('products', ['brand' => $brand->slug]) }}"
-                                    class="our-products-card-media d-flex align-items-center justify-content-center"
-                                    aria-label="{{ $brand->name }}">
-                                    @if ($brand->logoUrl())
-                                        <img src="{{ $brand->logoUrl() }}" alt="{{ $brand->name }}"
-                                            class="our-products-card-img" loading="lazy" decoding="async">
-                                    @else
-                                        <span class="our-products-card-name h5 mb-0">{{ $brand->name }}</span>
-                                    @endif
-                                </a>
-                                <a href="{{ route('products', ['brand' => $brand->slug]) }}"
-                                    class="our-products-card-link">
-                                    Learn More
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
+            <div class="our-products-grid">
+                @foreach ($brands as $brand)
+                    <a href="{{ route('products', ['brand' => $brand->slug]) }}"
+                        class="our-products-tile"
+                        @if ($brand->logoUrl()) style="background-image: url('{{ $brand->logoUrl() }}');" @endif
+                        aria-label="{{ $brand->name }}">
+                        @if (!$brand->logoUrl())
+                            <span class="our-products-tile-name">{{ $brand->name }}</span>
+                        @endif
+                        <span class="our-products-btn">Learn More</span>
+                    </a>
+                @endforeach
             </div>
         </section>
     @endif
