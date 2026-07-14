@@ -2,6 +2,7 @@
 
 use App\Models\AboutPage;
 use App\Models\Blog;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ContactPage;
 use App\Models\Subcategory;
@@ -114,6 +115,15 @@ Route::get('/', function () {
         ->orderByDesc('id')
         ->get();
 
+    $brands = Brand::query()
+        ->where('is_active', true)
+        ->where('show_on_home', true)
+        ->whereHas('products')
+        ->with(['products' => fn ($q) => $q->orderBy('title')])
+        ->orderBy('sort_order')
+        ->orderBy('name')
+        ->get();
+
     $blogs = Blog::query()
         ->where(function ($q) {
             $q->whereNull('published_at')->orWhere('published_at', '<=', now());
@@ -122,7 +132,7 @@ Route::get('/', function () {
         ->limit(12)
         ->get();
 
-    return view('home', compact('featuredProducts', 'home', 'blogs', 'contact'));
+    return view('home', compact('featuredProducts', 'brands', 'home', 'blogs', 'contact'));
 })->name('home');
 
 Route::get('/blogs', function () {

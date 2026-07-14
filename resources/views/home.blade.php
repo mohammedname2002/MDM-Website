@@ -5,6 +5,21 @@ MDM
 @endsection
 @section('css')
     <style>
+        .letter-spacing-2 {
+            letter-spacing: 0.12em;
+        }
+
+        .our-products-brand-logo img {
+            max-height: 90px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .our-products-brand + .our-products-brand {
+            border-top: 1px solid var(--bs-border-color);
+            padding-top: 3.5rem;
+        }
+
         .clinical-innovation-section {
             --clinical-radius: clamp(1.5rem, 2vw, 2.5rem);
             background-color: #f4efe6;
@@ -262,6 +277,40 @@ MDM
         </div>
 
     </section>
+
+    @if (!empty($brands) && $brands->isNotEmpty())
+        <section id="our-products" class="our-products-section pb-15 pb-lg-20">
+            <div class="container">
+                <div class="mb-11 text-center" data-animate="fadeInUp">
+                    <span class="text-uppercase fw-semibold text-primary letter-spacing-2 d-block mb-2">Our Products</span>
+                    <h2 class="h3 mb-0">Explore Our Brands</h2>
+                </div>
+
+                @foreach ($brands as $brand)
+                    <div class="our-products-brand mb-13 pb-2" data-animate="fadeInUp">
+                        <div class="our-products-brand-head text-center mb-8">
+                            @if ($brand->logoUrl())
+                                <div class="our-products-brand-logo mb-4">
+                                    <img src="{{ $brand->logoUrl() }}" alt="{{ $brand->name }}"
+                                        class="img-fluid d-inline-block" loading="lazy" decoding="async">
+                                </div>
+                            @endif
+                            <h3 class="h4 mb-0">{{ $brand->name }}</h3>
+                            @if (filled($brand->description))
+                                <p class="text-body-secondary mt-2 mb-0 mw-lg-75 ms-auto me-auto">{{ $brand->description }}</p>
+                            @endif
+                        </div>
+
+                        <div class="row gy-50px justify-content-center">
+                            @foreach ($brand->products as $product)
+                                @include('partials.product-grid-card', ['product' => $product])
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+    @endif
 
     @php
         $chooseHeading = (string) ($home->choose_us_heading ?? '');

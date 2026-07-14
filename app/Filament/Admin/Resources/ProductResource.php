@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ProductResource\Pages;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Subcategory;
@@ -99,8 +100,15 @@ class ProductResource extends Resource
                     ])
                     ->columns(2),
                 Forms\Components\Section::make('Organization')
-                    ->description('Place this product in the category tree. Subcategory and sub-subcategory are optional — pick as deep as you need.')
+                    ->description('Assign a brand (company) and place this product in the category tree. Subcategory and sub-subcategory are optional — pick as deep as you need.')
                     ->schema([
+                        Forms\Components\Select::make('brand_id')
+                            ->label('Brand / company')
+                            ->options(fn () => Brand::query()->orderBy('sort_order')->orderBy('name')->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->helperText('Groups this product under a brand in the "Our Products" home section.')
+                            ->columnSpanFull(),
                         Forms\Components\Select::make('category_id')
                             ->label('Category')
                             ->options(fn () => Category::query()->orderBy('sort_order')->orderBy('name')->pluck('name', 'id'))
@@ -159,6 +167,11 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('brand.name')
+                    ->label('Brand')
+                    ->placeholder('—')
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Category')
                     ->placeholder('—')
@@ -198,6 +211,11 @@ class ProductResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
+                Tables\Filters\SelectFilter::make('brand_id')
+                    ->label('Brand')
+                    ->relationship('brand', 'name')
+                    ->searchable()
+                    ->preload(),
                 Tables\Filters\SelectFilter::make('category_id')
                     ->label('Category')
                     ->relationship('category', 'name')

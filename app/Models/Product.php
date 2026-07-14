@@ -15,6 +15,7 @@ class Product extends Model
     protected $fillable = [
         'title',
         'slug',
+        'brand_id',
         'category_id',
         'subcategory_id',
         'sub_subcategory_id',
@@ -31,6 +32,7 @@ class Product extends Model
     protected function casts(): array
     {
         return [
+            'brand_id' => 'integer',
             'category_id' => 'integer',
             'subcategory_id' => 'integer',
             'sub_subcategory_id' => 'integer',
@@ -76,6 +78,11 @@ class Product extends Model
         }
 
         return $slug;
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function category(): BelongsTo
