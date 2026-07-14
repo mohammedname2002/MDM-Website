@@ -63,18 +63,18 @@ MDM
             position: relative;
             z-index: 2;
             display: inline-block;
-            background-color: #e6156f;
+            background-color: var(--bs-primary);
             color: #fff;
             font-weight: 600;
             font-size: 1rem;
             letter-spacing: .01em;
             padding: .85rem 2.25rem;
             border-radius: .25rem;
-            transition: background-color .25s ease, transform .25s ease;
+            transition: filter .25s ease, transform .25s ease;
         }
 
         .our-products-tile:hover .our-products-btn {
-            background-color: #c01059;
+            filter: brightness(0.9);
             transform: translateY(-3px);
         }
 
