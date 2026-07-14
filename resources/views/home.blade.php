@@ -322,33 +322,6 @@ MDM
         </div>
     </section>
 
-    <section id="because_you_need_time_for_yourself_2">
-
-        <div class="container pt-13 pt-lg-15 my-4 pb-15 pb-lg-20">
-            <div class="mb-13 text-center pb-3" data-animate="fadeInUp">
-                <img data-src="{{ asset('assets/images/shop/single-image-01.png') }}" width="140" height="138"
-                    class="mb-5 img-fluid lazy-image d-inline-block" alt="..." src="#">
-                <h2 class="h3 mb-0">Because You Need Time for Yourself.<br />Blend Beauty in You</h2>
-            </div>
-            <div class="row gy-50px justify-content-center">
-                @forelse ($featuredProducts as $product)
-                    @include('partials.product-grid-card', ['product' => $product])
-                @empty
-                    <div class="col-12 text-center py-10">
-                        <p class="text-body-secondary mb-0">No featured products yet. In the admin panel, open a product
-                            and enable Featured on home, then set order and images.</p>
-                    </div>
-                @endforelse
-            </div>
-            <div class="text-center mt-12" data-animate="fadeInUp">
-                <a href="{{ route('products') }}" class="btn btn-outline-dark">
-                    Shop All Product
-                </a>
-            </div>
-        </div>
-
-    </section>
-
     @if (!empty($brands) && $brands->isNotEmpty())
         <section id="our-products" class="our-products-section pt-13 pt-lg-15">
             <div class="text-center mb-9 mb-lg-11" data-animate="fadeInUp">
